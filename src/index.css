@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .bisleri-text {
+    @apply relative font-black uppercase tracking-tighter;
+    font-size: 3.5rem;
+    color: rgba(255, 255, 255, 0.2); /* Translucent plastic effect */
+    -webkit-text-stroke: 1.5px #00a8ff;
+    background: linear-gradient(#00a8ff 50%, #00d2ff 50%);
+    background-size: 100% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: liquid-wave 4s ease-in-out infinite;
+  }
+}
+
+@keyframes liquid-wave {
+  0%, 100% { background-position: 0 -100%; }
+  50% { background-position: 0 100%; }
+}
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, nord;
+}
