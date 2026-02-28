@@ -1,0 +1,23 @@
+/* src/App.css */
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure smooth scrolling for your Navbar links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix for background consistency across sections */
+.min-h-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Prevents layout shift when LoadingAnimation finishes */
+.relative {
+  transition: opacity 0.5s ease-in-out;
+}

@@ -1,24 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@layer utilities {
-  .bisleri-text {
-    @apply relative font-black uppercase tracking-tighter;
-    font-size: 3.5rem;
-    color: rgba(255, 255, 255, 0.2); /* Translucent plastic effect */
-    -webkit-text-stroke: 1.5px #00a8ff;
-    background: linear-gradient(#00a8ff 50%, #00d2ff 50%);
-    background-size: 100% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: liquid-wave 4s ease-in-out infinite;
+@theme {
+  /* Core Colors */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* Custom Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-15px) rotate(1deg); }
+    66% { transform: translateY(-8px) rotate(-1deg); }
+  }
+  @keyframes wave {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(-25%) translateY(-5px); }
+  }
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-wave: wave 8s ease-in-out infinite;
+
+  /* Fonts & Radius */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+:root {
+  --background: 200 30% 95%;
+  --foreground: 210 40% 15%;
+  --primary: 195 55% 42%;
+  --primary-foreground: 0 0% 100%;
+  --card: 195 30% 92%;
+  --card-foreground: 210 40% 15%;
+  --muted: 200 20% 90%;
+  --muted-foreground: 210 15% 45%;
+  --accent: 175 40% 55%;
+  --accent-foreground: 0 0% 100%;
+  --border: 200 20% 82%;
+  --radius: 0.75rem;
+}
+
+/* Custom Utilities for Glass & Water Effects */
+@utility glass-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border) / 0.5);
+  background: hsla(200, 30%, 96%, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px hsla(200, 30%, 40%, 0.06), inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
+}
+
+@utility btn-water {
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, hsl(195, 55%, 45%), hsl(185, 45%, 50%));
+  color: white;
+  transition: all 0.3s;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px hsla(195, 50%, 45%, 0.3);
   }
 }
 
-@keyframes liquid-wave {
-  0%, 100% { background-position: 0 -100%; }
-  50% { background-position: 0 100%; }
-}
-
-@plugin "daisyui" {
-  themes: light --default, dark --prefersdark, nord;
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground font-body; }
+  h1, h2, h3, h4 { @apply font-display; }
 }
