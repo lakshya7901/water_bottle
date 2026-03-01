@@ -1,107 +1,106 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import { Droplets, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Products", href: "#products" },
-  { label: "Contact", href: "#contact" },
-];
-
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Handle scroll effect for the glass background
+  // Scroll logic for glass effect intensity
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navLinks = [
+    { name: "Home", href: "#" },
+    { name: "About", href: "#about" },
+    { name: "Products", href: "#products" },
+    { name: "Contact", href: "#contact" },
+  ];
+
   return (
-    <motion.nav
-      /* Dynamically applying glass-card only when scrolled */
+    <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-        scrolled ? "glass-card rounded-none border-border/40 py-2" : "bg-transparent py-4"
+        "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ease-in-out px-4 py-4",
+        isScrolled 
+          ? "bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-lg" 
+          : "bg-transparent"
       )}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
     >
-      <div className="container mx-auto flex items-center justify-between px-6">
-        <a href="#home" className="flex items-center gap-2 group">
-          <Droplets className="w-8 h-8 text-primary transition-transform group-hover:scale-110" />
-          <span className="text-2xl font-display font-bold text-gradient-water tracking-tight">
+      <div className="container mx-auto flex items-center justify-between">
+        
+        {/* 1. Brand Logo - Professional & Clean */}
+        <div className="flex items-center gap-2 group cursor-pointer">
+          <div className="p-2 bg-primary/10 rounded-xl transition-colors group-hover:bg-primary/20">
+            <Droplets className="h-7 w-7 text-primary animate-pulse" />
+          </div>
+          <span className="text-2xl font-display font-bold tracking-tight text-[#2D7A8E]">
             AquaPure
           </span>
-        </a>
+        </div>
 
-        {/* Desktop Navigation */}
+        {/* 2. Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
             <a
-              key={link.href}
+              key={link.name}
               href={link.href}
-              className="text-sm font-semibold text-foreground/70 hover:text-primary transition-all duration-200 relative group/link"
+              className="font-display text-sm font-semibold text-[#5A7D87] hover:text-primary transition-all relative group"
             >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover/link:w-full" />
+              {link.name}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
             </a>
           ))}
-          <a href="#contact" className="btn-water text-sm py-2.5 px-8 shadow-md">
+        </div>
+
+        {/* 3. Action Button - Premium "Order Now" Design */}
+        <div className="hidden md:flex items-center">
+          <button 
+            className={cn(
+              "rounded-full px-8 py-3 font-display font-bold text-white",
+              "bg-gradient-to-r from-[#4CA9BC] to-[#2D7A8E]",
+              "shadow-[0_8px_20px_rgba(76,169,188,0.3)]",
+              "transition-all duration-300 hover:scale-105 hover:shadow-primary/40 active:scale-95"
+            )}
+          >
             Order Now
-          </a>
+          </button>
         </div>
 
         {/* Mobile Toggle Button */}
-        <button
-          className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition-colors"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle Menu"
-        >
-          {mobileOpen ? <X className="w-6 h-6 text-primary" /> : <Menu className="w-6 h-6 text-foreground" />}
-        </button>
+        <div className="md:hidden">
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 text-[#2D7A8E]"
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="md:hidden glass-card rounded-none border-x-0 border-b-0 px-6 pb-8 pt-2 overflow-hidden shadow-2xl"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          >
-            <div className="flex flex-col gap-5">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-display font-medium text-foreground py-2 border-b border-border/10"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a 
-                href="#contact" 
-                className="btn-water text-center text-sm py-3 mt-2" 
-                onClick={() => setMobileOpen(false)}
-              >
-                Order Now
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      {isMobileMenuOpen && (
+        <div className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-2xl border-b border-primary/10 p-6 flex flex-col gap-6 md:hidden animate-in slide-in-from-top duration-300">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.href} 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-lg font-display font-medium text-[#5A7D87]"
+            >
+              {link.name}
+            </a>
+          ))}
+          <button className="w-full rounded-full py-4 bg-primary text-white font-bold">
+            Order Now
+          </button>
+        </div>
+      )}
+    </nav>
   );
 };
 
